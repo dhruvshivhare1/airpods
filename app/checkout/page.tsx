@@ -173,7 +173,11 @@ Please arrange cash on delivery. Thank you!`;
       return;
     }
     // Generate unique order ID only when proceeding to payment
-    const uniqueOrderId = `ORDER_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${Math.random().toString(36).substr(2, 5)}`;
+    const timestamp = Date.now();
+    const random1 = Math.random().toString(36).substr(2, 9);
+    const random2 = Math.random().toString(36).substr(2, 5);
+    const uniqueOrderId = `ORDER_${timestamp}_${random1}_${random2}`;
+    console.log('Generated order ID:', uniqueOrderId);
     setPaymentOrderId(uniqueOrderId);
     setShowCashfree(true);
   };

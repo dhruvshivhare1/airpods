@@ -27,6 +27,11 @@ export default function CashfreePayment({
   const [paymentUrl, setPaymentUrl] = useState<string | null>(null);
 
   const initiateCashfreePayment = async () => {
+    if (isProcessing) {
+      console.log('Payment already in progress, ignoring click');
+      return;
+    }
+    
     setIsProcessing(true);
     
     try {
