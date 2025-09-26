@@ -97,56 +97,44 @@ export async function POST(request: NextRequest) {
       }, { status: orderResponse.status });
     }
 
-    // Step 2: Create payment session with proper retry logic
+    // Step 2: Create payment session (simplified - no retry logic)
     console.log('Order created, creating payment session...');
     
-    let paymentSessionCreated = false;
-    let paymentSessionId = null;
-    let attempts = 0;
-    const maxAttempts = 5;
-    
-    while (!paymentSessionCreated && attempts < maxAttempts) {
-      attempts++;
-      console.log(`Attempt ${attempts}/${maxAttempts} to create payment session...`);
-      
-      const paymentSessionRequest = {
-        order_id: orderId
-      };
+    const paymentSessionRequest = {
+      order_id: orderId
+    };
 
-      const cashfreeResponse = await fetch(`${cashfreeConfig.baseUrl}/orders/payment-sessions`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-api-version': '2023-08-01',
-          'x-client-id': cashfreeConfig.appId,
-          'x-client-secret': cashfreeConfig.secretKey
-        },
-        body: JSON.stringify(paymentSessionRequest)
-      });
+    console.log('Payment session request:', paymentSessionRequest);
 
-      const responseData = await cashfreeResponse.json();
-      console.log(`Payment session attempt ${attempts} response:`, responseData);
+    const cashfreeResponse = await fetch(`${cashfreeConfig.baseUrl}/orders/payment-sessions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'x-api-version': '2023-08-01',
+        'x-client-id': cashfreeConfig.appId,
+        'x-client-secret': cashfreeConfig.secretKey
+      },
+      body: JSON.stringify(paymentSessionRequest)
+    });
 
-      if (cashfreeResponse.ok && responseData.payment_session_id) {
-        paymentSessionCreated = true;
-        paymentSessionId = responseData.payment_session_id;
-        break;
-      }
+    const responseData = await cashfreeResponse.json();
+    console.log('Payment session response:', { status: cashfreeResponse.status, data: responseData });
 
-      if (attempts < maxAttempts) {
-        const delay = attempts * 2000; // 2s, 4s, 6s, 8s
-        console.log(`Payment session not ready, waiting ${delay}ms before retry...`);
-        await new Promise(resolve => setTimeout(resolve, delay));
-      }
-    }
-
-    if (!paymentSessionCreated) {
+    if (!cashfreeResponse.ok || !responseData.payment_session_id) {
       return NextResponse.json({
         success: false,
-        message: 'Payment session creation failed after multiple attempts',
-        details: 'The order was created but payment session could not be established. Please try again.'
-      }, { status: 500 });
+        message: 'Payment session creation failed',
+        details: responseData,
+        debug: {
+          status: cashfreeResponse.status,
+          orderData: orderData,
+          paymentSessionRequest: paymentSessionRequest,
+          baseUrl: cashfreeConfig.baseUrl
+        }
+      }, { status: cashfreeResponse.status });
     }
+
+    const paymentSessionId = responseData.payment_session_id;
 
     return NextResponse.json({
       success: true,
