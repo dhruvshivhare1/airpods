@@ -64,7 +64,7 @@ export default function CashfreePayment({
         script.src = 'https://sdk.cashfree.com/js/v3/cashfree.js';
         script.onload = () => {
           const cashfree = (window as any).Cashfree({
-            mode: process.env.NODE_ENV === 'production' ? 'PRODUCTION' : 'TEST'
+            mode: 'PRODUCTION' // Always use production mode since you have production credentials
           });
           
           cashfree.checkout({

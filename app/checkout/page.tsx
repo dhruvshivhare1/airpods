@@ -29,6 +29,7 @@ export default function CheckoutPage() {
   const [paymentMethod, setPaymentMethod] = useState('card');
   const [isProcessing, setIsProcessing] = useState(false);
   const [showCashfree, setShowCashfree] = useState(false);
+  const [paymentOrderId, setPaymentOrderId] = useState('');
 
   // Save order to Google Sheet via SheetDB
   const saveOrderToSheet = async (params: {
@@ -171,6 +172,9 @@ Please arrange cash on delivery. Thank you!`;
       alert('Please fill in all required fields');
       return;
     }
+    // Generate unique order ID only when proceeding to payment
+    const uniqueOrderId = `ORDER_${Date.now()}_${Math.random().toString(36).substr(2, 9)}_${Math.random().toString(36).substr(2, 5)}`;
+    setPaymentOrderId(uniqueOrderId);
     setShowCashfree(true);
   };
 
@@ -375,7 +379,7 @@ Please arrange cash on delivery. Thank you!`;
                     ) : (
                       <CashfreePayment
                         amount={total}
-                        orderId={`ORDER_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`}
+                        orderId={paymentOrderId}
                         customerInfo={{
                           name: `${formData.firstName} ${formData.lastName}`,
                           email: formData.email,
