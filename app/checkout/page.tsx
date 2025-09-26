@@ -4,14 +4,10 @@ import { useState } from 'react';
 import toast from 'react-hot-toast';
 import dynamic from 'next/dynamic';
 import { motion } from 'framer-motion';
-import { ArrowLeft, CreditCard, Truck, Shield, Check, MessageCircle } from 'lucide-react';
+import { ArrowLeft, Truck, Shield, Check, MessageCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 import Header from '@/components/Header';
 import { useCart, CartItem } from '@/components/CartProvider';
-const CashfreePayment = dynamic(() => import('@/components/CashfreePayment'), {
-  ssr: false,
-  loading: () => <div className="w-full h-20 bg-gray-800 rounded-xl animate-pulse"></div>
-});
 
 export default function CheckoutPage() {
   const router = useRouter();
@@ -26,18 +22,15 @@ export default function CheckoutPage() {
     zipCode: '',
     country: 'IN',
   });
-  const [paymentMethod, setPaymentMethod] = useState('card');
   const [isProcessing, setIsProcessing] = useState(false);
-  const [showCashfree, setShowCashfree] = useState(false);
-  const [paymentOrderId, setPaymentOrderId] = useState('');
 
   // Save order to Google Sheet via SheetDB
   const saveOrderToSheet = async (params: {
-    paymentMethod: 'cod' | 'card';
+    paymentMethod: 'cod';
     subtotal: number;
     shipping: number;
     total: number;
-    status: 'pending' | 'paid';
+    status: 'pending';
   }, showToast: boolean = true) => {
     const endpoint = process.env.NEXT_PUBLIC_SHEETDB_URL;
     if (!endpoint) {
@@ -154,33 +147,6 @@ Please arrange cash on delivery. Thank you!`;
     window.open(whatsappUrl, '_blank');
   };
 
-  const handleCashfreeSuccess = (paymentData: any) => {
-    console.log('Cashfree payment successful:', paymentData);
-    // Save order to SheetDB as paid
-    saveOrderToSheet({ paymentMethod: 'card', subtotal, shipping, total, status: 'paid' });
-    clearCart();
-    router.push('/checkout/success');
-  };
-
-  const handleCashfreeFailure = (error: any) => {
-    console.error('Cashfree payment failed:', error);
-    alert('Payment failed. Please try again.');
-  };
-
-  const handleProceedToPayment = () => {
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.phone || !formData.address || !formData.city || !formData.zipCode) {
-      alert('Please fill in all required fields');
-      return;
-    }
-    // Generate unique order ID only when proceeding to payment
-    const timestamp = Date.now();
-    const random1 = Math.random().toString(36).substr(2, 9);
-    const random2 = Math.random().toString(36).substr(2, 5);
-    const uniqueOrderId = `ORDER_${timestamp}_${random1}_${random2}`;
-    console.log('Generated order ID:', uniqueOrderId);
-    setPaymentOrderId(uniqueOrderId);
-    setShowCashfree(true);
-  };
 
   if (cart.length === 0) {
     return (
@@ -311,90 +277,34 @@ Please arrange cash on delivery. Thank you!`;
                   </div>
                 </div>
 
-                {/* Payment Method */}
+                {/* Payment Method - COD Only */}
                 <div className="bg-gray-900/50 rounded-xl sm:rounded-2xl p-4 sm:p-6 border border-gray-800">
                   <h2 className="text-lg sm:text-xl font-semibold mb-3 sm:mb-4">Payment Method</h2>
-                  <div className="space-y-3 sm:space-y-4">
-                    <div className="flex items-center space-x-2 sm:space-x-3">
-                      <input
-                        type="radio"
-                        id="card"
-                        name="payment"
-                        value="card"
-                        checked={paymentMethod === 'card'}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="w-4 h-4 text-blue-600"
-                      />
-                      <label htmlFor="card" className="flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base">
-                        <CreditCard className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>UPI / Debit / Credit Card</span>
-                      </label>
-                    </div>
-                    <div className="flex items-center space-x-2 sm:space-x-3">
-                      <input
-                        type="radio"
-                        id="cod"
-                        name="payment"
-                        value="cod"
-                        checked={paymentMethod === 'cod'}
-                        onChange={(e) => setPaymentMethod(e.target.value)}
-                        className="w-4 h-4 text-blue-600"
-                      />
-                      <label htmlFor="cod" className="flex items-center space-x-1 sm:space-x-2 text-sm sm:text-base">
-                        <Truck className="w-4 h-4 sm:w-5 sm:h-5" />
-                        <span>Cash on Delivery</span>
-                      </label>
-                    </div>
+                  <div className="flex items-center space-x-2 sm:space-x-3">
+                    <Truck className="w-4 h-4 sm:w-5 sm:h-5 text-green-500" />
+                    <span className="text-sm sm:text-base text-green-300">Cash on Delivery</span>
                   </div>
                 </div>
 
-                {/* Place Order Button or WhatsApp COD Button */}
-                {paymentMethod === 'cod' ? (
-                  <div className="space-y-3">
-                    <div className="bg-blue-900/20 border border-blue-500/30 rounded-xl p-4">
-                      <div className="text-blue-300 text-sm space-y-2 text-center">
-                        <p>💬 Click the button below to place your order via WhatsApp. Our team will confirm your order and arrange cash on delivery.</p>
-                        <p className="text-yellow-300">Note: You will have to pay a small security amount in advance (delivery charges ₹200) to confirm COD.</p>
-                      </div>
+                {/* WhatsApp COD Button */}
+                <div className="space-y-3">
+                  <div className="bg-blue-900/20 border border-blue-500/30 rounded-xl p-4">
+                    <div className="text-blue-300 text-sm space-y-2 text-center">
+                      <p>💬 Click the button below to place your order via WhatsApp. Our team will confirm your order and arrange cash on delivery.</p>
+                      <p className="text-yellow-300">Note: You will have to pay a small security amount in advance (delivery charges ₹200) to confirm COD.</p>
                     </div>
-                    <motion.button
-                      type="button"
-                      onClick={handleWhatsAppOrder}
-                      whileHover={{ scale: 1.02 }}
-                      whileTap={{ scale: 0.98 }}
-                      className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-semibold hover:from-green-400 hover:to-green-500 transition-all duration-300 flex items-center justify-center space-x-2"
-                    >
-                      <MessageCircle className="w-5 h-5" />
-                      <span>WhatsApp - Cash on Delivery - ₹{total}</span>
-                    </motion.button>
                   </div>
-                ) : (
-                  <div className="space-y-3">
-                    {!showCashfree ? (
-                      <motion.button
-                        type="button"
-                        onClick={handleProceedToPayment}
-                        whileHover={{ scale: 1.02 }}
-                        whileTap={{ scale: 0.98 }}
-                        className="w-full bg-gradient-to-r from-green-600 to-emerald-600 text-white py-4 rounded-xl font-semibold glow-button hover:from-green-500 hover:to-emerald-500 transition-all duration-300"
-                      >
-                        Proceed to Payment - ₹{total}
-                      </motion.button>
-                    ) : (
-                      <CashfreePayment
-                        amount={total}
-                        orderId={paymentOrderId}
-                        customerInfo={{
-                          name: `${formData.firstName} ${formData.lastName}`,
-                          email: formData.email,
-                          phone: formData.phone
-                        }}
-                        onSuccess={handleCashfreeSuccess}
-                        onFailure={handleCashfreeFailure}
-                      />
-                    )}
-                  </div>
-                )}
+                  <motion.button
+                    type="button"
+                    onClick={handleWhatsAppOrder}
+                    whileHover={{ scale: 1.02 }}
+                    whileTap={{ scale: 0.98 }}
+                    className="w-full bg-gradient-to-r from-green-500 to-green-600 text-white py-4 rounded-xl font-semibold hover:from-green-400 hover:to-green-500 transition-all duration-300 flex items-center justify-center space-x-2"
+                  >
+                    <MessageCircle className="w-5 h-5" />
+                    <span>WhatsApp - Cash on Delivery - ₹{total}</span>
+                  </motion.button>
+                </div>
               </form>
             </div>
 
