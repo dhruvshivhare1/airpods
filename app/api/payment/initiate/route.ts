@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     }
 
     // Resolve base URL for return/notify (prefer explicit env, fallback to headers)
-    const explicitBase = process.env.NEXT_PUBLIC_BASE_URL;
+    const explicitBase = process.env.NEXT_PUBLIC_BASE_URL?.replace(/\/$/, ''); // Remove trailing slash
     const forwardedProto = request.headers.get('x-forwarded-proto') || 'http';
     const host = request.headers.get('x-forwarded-host') || request.headers.get('host') || '';
     const inferredBase = host ? `${forwardedProto}://${host}` : '';
