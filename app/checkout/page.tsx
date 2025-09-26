@@ -97,7 +97,7 @@ export default function CheckoutPage() {
   };
 
   const subtotal = 1399; // Base price (prepaid price including tax)
-  const shipping = paymentMethod === 'cod' ? 100 : 0; // Shipping added only for COD
+  const shipping = 100; // Shipping for COD
   const tax = 0; // Tax already included in item price
   const total = subtotal + shipping; // Final price
 
