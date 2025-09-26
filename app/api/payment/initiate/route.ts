@@ -60,12 +60,15 @@ export async function POST(request: NextRequest) {
         customer_id: customerDetails.customerId,
         customer_name: customerDetails.customerName,
         customer_email: customerDetails.customerEmail,
-        customer_phone: customerDetails.customerPhone
+        customer_phone: customerDetails.customerPhone.replace(/\D/g, '').substring(0, 10) // Remove non-digits and limit to 10 digits
       },
       order_meta: {
         return_url: `${baseUrlForCallbacks}/payment/callback?order_id=${orderId}`,
         notify_url: `${baseUrlForCallbacks}/api/payment/callback`
-      }
+      },
+      // Add required fields for production
+      order_note: `AirPods Pro order - ${orderId}`,
+      order_expiry_time: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString() // 30 days from now
     };
 
     console.log('Creating order:', orderId, {
