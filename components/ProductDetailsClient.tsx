@@ -95,8 +95,8 @@ export default function ProductDetailsClient({ product, reviews }: ProductDetail
 
   const guarantees = [
     { icon: Truck, title: 'Free Delivery', description: 'Free shipping on orders over ₹1000' },
-    { icon: RotateCcw, title: '30-Day Returns', description: 'Easy returns within 30 days' },
-    { icon: Shield, title: '2-Year Warranty', description: 'Comprehensive coverage included' },
+    { icon: RotateCcw, title: '7 Day Returns', description: 'Easy returns within 7 days' },
+    { icon: Shield, title: '6 months Warranty', description: 'Comprehensive coverage included' },
     { icon: Award, title: 'Authentic Product', description: '100% genuine Apple products' },
   ];
 
