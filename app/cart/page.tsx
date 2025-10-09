@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Minus, Plus, X, CreditCard, Truck, Shield, ArrowRight } from 'lucide-react';
+import { Minus, Plus, X, Truck, Shield, ArrowRight } from 'lucide-react';
 import Header from '@/components/Header';
 import { useCart } from '@/components/CartProvider';
 import Link from 'next/link';
@@ -158,29 +158,6 @@ export default function CartPage() {
               </div>
             </motion.div>
 
-            {/* Payment Methods */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 0.1 }}
-              className="bg-gray-900/50 rounded-xl p-6 border border-gray-800 glass-effect space-y-4"
-            >
-              <h3 className="font-semibold">Payment Methods</h3>
-              <div className="space-y-2">
-                <div className="flex items-center space-x-3 p-3 bg-gray-800/50 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
-                  <CreditCard className="w-5 h-5 text-blue-400" />
-                  <span>Credit Card</span>
-                </div>
-                <div className="flex items-center space-x-3 p-3 bg-gray-800/50 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
-                  <CreditCard className="w-5 h-5 text-green-400" />
-                  <span>Debit Card</span>
-                </div>
-                <div className="flex items-center space-x-3 p-3 bg-gray-800/50 rounded-lg cursor-pointer hover:bg-gray-800 transition-colors">
-                  <div className="w-5 h-5 bg-purple-600 rounded text-white text-xs flex items-center justify-center font-bold">U</div>
-                  <span>UPI</span>
-                </div>
-              </div>
-            </motion.div>
 
             {/* Security Features */}
             <motion.div

@@ -24,7 +24,7 @@ export default function TermsPage() {
           </div>
           <div>
             <h2 className="text-xl font-semibold text-white mb-2">Payments</h2>
-            <p>Payments are processed securely via Cashfree Payment Gateway. Orders are confirmed upon successful payment authorization.</p>
+            <p>We accept Cash on Delivery (COD) orders via WhatsApp. Orders are confirmed upon successful WhatsApp order placement and customer details verification.</p>
           </div>
           <div>
             <h2 className="text-xl font-semibold text-white mb-2">Shipping & Delivery</h2>

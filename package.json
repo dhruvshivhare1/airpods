@@ -2,7 +2,7 @@
   "name": "gadgetghar-airpods",
   "version": "1.0.0",
   "private": true,
-  "description": "Modern e-commerce website for AirPods Pro with payment integration",
+  "description": "Modern e-commerce website for AirPods Pro with WhatsApp ordering",
   "scripts": {
     "dev": "next dev",
     "build": "next build",
@@ -37,8 +37,8 @@
     "nextjs",
     "ecommerce",
     "airpods",
-    "payment",
-    "cashfree",
+    "whatsapp",
+    "cod",
     "tailwindcss"
   ],
   "author": "GadgetGhar",

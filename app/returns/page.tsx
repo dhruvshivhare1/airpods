@@ -83,9 +83,8 @@ export default function ReturnsPage() {
             <div className="bg-blue-900/20 border border-blue-500/30 rounded-xl p-6">
               <ul className="space-y-2">
                 <li><strong>Processing Time:</strong> 3-5 business days after we receive your return</li>
-                <li><strong>Bank Transfer:</strong> 5-7 business days to reflect in your account</li>
-                <li><strong>Credit Card:</strong> 3-5 business days to appear on your statement</li>
-                <li><strong>UPI/Wallet:</strong> 1-2 business days</li>
+                <li><strong>Cash on Delivery Refunds:</strong> 5-7 business days via bank transfer</li>
+                <li><strong>WhatsApp Order Refunds:</strong> 3-5 business days via bank transfer</li>
               </ul>
             </div>
           </div>

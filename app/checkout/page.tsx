@@ -346,23 +346,21 @@ Please arrange cash on delivery. Thank you!`;
                     <span>Total</span>
                     <span>₹{total}</span>
                   </div>
-                  {paymentMethod === 'cod' && (
-                    <div className="text-xs text-yellow-300 pt-1">Security amount (delivery charges ₹200) is collected in advance for COD orders.</div>
-                  )}
+                  <div className="text-xs text-yellow-300 pt-1">Security amount (delivery charges ₹200) is collected in advance for COD orders.</div>
                 </div>
               </div>
 
               {/* Security Badges */}
               <div className="bg-gray-900/50 rounded-2xl p-6 border border-gray-800">
-                <h3 className="font-semibold mb-4">Secure Checkout</h3>
+                <h3 className="font-semibold mb-4">Secure Ordering</h3>
                 <div className="flex items-center space-x-4">
                   <div className="flex items-center space-x-2">
                     <Shield className="w-5 h-5 text-green-400" />
                     <span className="text-sm">SSL Encrypted</span>
                   </div>
                   <div className="flex items-center space-x-2">
-                    <Check className="w-5 h-5 text-green-400" />
-                    <span className="text-sm">Secure Payment</span>
+                    <Truck className="w-5 h-5 text-green-400" />
+                    <span className="text-sm">Cash on Delivery</span>
                   </div>
                 </div>
               </div>
