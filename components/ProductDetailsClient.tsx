@@ -49,7 +49,7 @@ export default function ProductDetailsClient({ product, reviews }: ProductDetail
       addToCart({
         id: product.id,
         name: product.name,
-        price: 1399, // Prepaid price including tax
+        price: 999, // Prepaid price including tax
         image: product.images[0],
         color: product.color,
       });
@@ -63,7 +63,7 @@ export default function ProductDetailsClient({ product, reviews }: ProductDetail
       addToCart({
         id: product.id,
         name: product.name,
-        price: 1399, // Prepaid price including tax
+        price: 999, // Prepaid price including tax
         image: product.images[0],
         color: product.color,
       });
