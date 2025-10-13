@@ -28,7 +28,7 @@ const productData = {
   'airpods-pro-2': {
     id: 'airpods-pro-2',
     name: 'AirPods Pro (2nd generation)',
-    price: 1499,
+    price: 999,
     originalPrice: 22999,
     color: 'White',
     variant: 'pro' as const,
