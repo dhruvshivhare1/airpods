@@ -189,6 +189,16 @@ const reviews = [
       'https://m.media-amazon.com/images/I/61n-vhdW4NL.jpg',
       'https://m.media-amazon.com/images/I/71VUwV8o+BL.jpg',
     ],
+      {
+    id: 3,
+    name: 'Ayush Yadav',
+    rating: 5,
+    date: '2024-01-08',
+    comment: 'The transparency mode is so useful for quick conversations. Highly recommend!',
+    verified: false,
+    images: [
+      https://m.media-amazon.com/images/I/814T0j+tKxL.jpg,
+    ],
   },
 ];
 
